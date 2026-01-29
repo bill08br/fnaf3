@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>FNAF 3</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    background: black;
+    font-family: "Courier New", monospace;
+    overflow: hidden;
+}
+
+.screen {
+    position: absolute;
+    inset: 0;
+    display: none;
+}
+
+.screen.active { display: block; }
+
+/* ===== MENU ===== */
+#menu { background: black; }
+
+.springtrap {
+    position: absolute;
+    right: -5%;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 85%;
+    opacity: 0.6;
+}
+
+.title {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    color: #9cff7a;
+    font-size: 26px;
+}
+
+.number {
+    position: absolute;
+    top: 90px;
+    left: 40px;
+    font-size: 120px;
+    color: #eaffea;
+}
+
+.options {
+    position: absolute;
+    top: 260px;
+    left: 40px;
+}
+
+.option {
+    font-size: 26px;
+    color: #9cff7a;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+/* ===== IMAGENS ===== */
+#news img,
+#night img,
+#office img,
+#jumpscare img,
+#cameraView {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ===== OFFICE ===== */
+#office { background: black; }
+
+/* BOTÃO CÂMERAS */
+#openCam {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    padding: 10px 16px;
+    border: 2px solid #00ff00;
+    color: #00ff00;
+    cursor: pointer;
+}
+
+/* ===== SISTEMA DE CÂMERAS ===== */
+#cameraSystem {
+    position: absolute;
+    inset: 0;
+    background: black;
+    display: none;
+}
+
+#map {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0,0,0,0.7);
+    padding: 10px;
+    border: 1px solid #00ff00;
+}
+
+.cam {
+    color: #9cff7a;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.cam.active::before {
+    content: "● ";
+    color: #00ff00;
+}
+
+#exitCam {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    padding: 10px;
+    border: 2px solid red;
+    color: red;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- MENU -->
+<div id="menu" class="screen active">
+    <img class="springtrap" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d703fc3a-23e5-41ca-a298-2fe7856c8d95/daycy8f-8aa6ff1b-7fee-49eb-a085-05bb5dd3aa48.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9kNzAzZmMzYS0yM2U1LTQxY2EtYTI5OC0yZmU3ODU2YzhkOTUvZGF5Y3k4Zi04YWE2ZmYxYi03ZmVlLTQ5ZWItYTA4NS0wNWJiNWRkM2FhNDguZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.enmDq5v0-tTbv6l1nChMbJR9Jb-6ANjGmcMgGdTBJuo">
+    <div class="title">Five Nights at Freddy's</div>
+    <div class="number">3</div>
+
+    <div class="options">
+        <div class="option" onclick="startGame()">Novo jogo</div>
+        <div class="option">Carregar jogo</div>
+        <div class="option" onclick="playJumpscare()">Jumpscare</div>
+    </div>
+</div>
+
+<!-- NEWS -->
+<div id="news" class="screen">
+    <img src="https://fnaflore.com/wp-content/uploads/2016/01/0.png">
+</div>
+
+<!-- NIGHT -->
+<div id="night" class="screen">
+    <img src="https://static.wikia.nocookie.net/freddy-fazbears-pizza/images/e/eb/FNaF3-Night1.jpg">
+</div>
+
+<!-- OFFICE -->
+<div id="office" class="screen">
+    <img id="officeGif" src="https://64.media.tumblr.com/57c1b1a88b99aab505d73a10c781d3e1/tumblr_inline_p7i0wksKPG1rvg9kl_500.gif">
+
+    <div id="openCam" onclick="toggleCams()">CÂMERAS ▲</div>
+
+    <!-- CAMERAS -->
+    <div id="cameraSystem">
+        <img id="cameraView">
+
+        <div id="map">
+            <div class="cam active" onclick="setCam(0)">CAM 01</div>
+            <div class="cam" onclick="setCam(1)">CAM 02</div>
+            <div class="cam" onclick="setCam(2)">CAM 03</div>
+            <div class="cam" onclick="setCam(3)">CAM 04</div>
+            <div class="cam" onclick="setCam(4)">CAM 05</div>
+        </div>
+
+        <div id="exitCam" onclick="exitCams()">SAIR</div>
+    </div>
+</div>
+
+<!-- JUMPSCARE -->
+<div id="jumpscare" class="screen">
+    <img src="https://i.makeagif.com/media/10-15-2016/reBTvW.gif">
+</div>
+
+<script>
+const cams = [
+ "https://static.wikia.nocookie.net/freddy-fazbears-pizza/images/e/eb/FNaF3_-_CAM_06.gif/revision/latest/smart/width/250/height/250?cb=20160411232014&path-prefix=es",
+ "https://static.wikia.nocookie.net/freddy-fazbears-pizza/images/0/0f/FNaF3_-_CAM_05.gif/revision/latest?cb=20160411230102&path-prefix=es",
+ "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuGe6rSsdSjm-4bPk_a9GQY88LRcXQkOJaDYET0I53mQ&s=10",
+ "https://static.wikia.nocookie.net/freddy-fazbears-pizza/images/2/21/FNaF3_-_CAM_02.gif/revision/latest/smart/width/250/height/250?cb=20160411223616&path-prefix=es",
+ "https://i.redd.it/e9sinchjusk51.gif"
+];
+
+function show(id){
+ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+}
+
+function startGame(){
+ show("news");
+ setTimeout(()=>show("night"),10000);
+ setTimeout(()=>{
+   show("office");
+   loopOffice();
+ },13000);
+}
+
+function playJumpscare(){
+ show("jumpscare");
+ setTimeout(()=>show("menu"),5000);
+}
+
+function loopOffice(){
+ setInterval(()=>{
+  officeGif.src = officeGif.src.split("?")[0]+"?t="+Date.now();
+ },2000);
+}
+
+let camOpen=false;
+function toggleCams(){
+ camOpen=!camOpen;
+ document.getElementById("cameraSystem").style.display=camOpen?"block":"none";
+ document.getElementById("openCam").innerText="CÂMERAS "+(camOpen?"▼":"▲");
+ if(camOpen) setCam(0);
+}
+
+function exitCams(){
+ camOpen=false;
+ document.getElementById("cameraSystem").style.display="none";
+ document.getElementById("openCam").innerText="CÂMERAS ▲";
+}
+
+function setCam(i){
+ cameraView.src=cams[i];
+ document.querySelectorAll(".cam").forEach(c=>c.classList.remove("active"));
+ document.querySelectorAll(".cam")[i].classList.add("active");
+
+ let n=0;
+ let g=setInterval(()=>{
+  cameraView.style.transform=`translate(${(Math.random()-0.5)*10}px,${(Math.random()-0.5)*10}px)`;
+  if(++n>5){clearInterval(g);cameraView.style.transform="";}
+ },50);
+}
+</script>
+
+</body>
+</html>
