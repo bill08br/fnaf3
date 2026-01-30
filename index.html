@@ -68,7 +68,6 @@ body {
 /* ===== IMAGENS ===== */
 #news img,
 #night img,
-#office img,
 #jumpscare img,
 #cameraView {
     width: 100%;
@@ -78,6 +77,22 @@ body {
 
 /* ===== OFFICE ===== */
 #office { background: black; }
+
+#officeContainer{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    cursor:pointer;
+}
+
+#officeGif{
+    position:absolute;
+    width:120%;
+    height:100%;
+    object-fit:cover;
+    left:-10%; /* centro */
+    transition:left 0.4s ease;
+}
 
 /* BOTÃO CÂMERAS */
 #openCam {
@@ -127,6 +142,15 @@ body {
     color: red;
     cursor: pointer;
 }
+#nightClock{
+    position:absolute;
+    top:20px;
+    right:30px;
+    font-size:28px;
+    color:#00ff00;
+    text-shadow:0 0 6px #00ff00;
+    z-index:10;
+}
 </style>
 </head>
 
@@ -134,7 +158,7 @@ body {
 
 <!-- MENU -->
 <div id="menu" class="screen active">
-    <img class="springtrap" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/d703fc3a-23e5-41ca-a298-2fe7856c8d95/daycy8f-8aa6ff1b-7fee-49eb-a085-05bb5dd3aa48.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9kNzAzZmMzYS0yM2U1LTQxY2EtYTI5OC0yZmU3ODU2YzhkOTUvZGF5Y3k4Zi04YWE2ZmYxYi03ZmVlLTQ5ZWItYTA4NS0wNWJiNWRkM2FhNDguZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.enmDq5v0-tTbv6l1nChMbJR9Jb-6ANjGmcMgGdTBJuo">
+    <img class="springtrap" src="https://i.pinimg.com/originals/fa/70/84/fa70846c2e28da478d1a7fa0247d5b2f.gif">
     <div class="title">Five Nights at Freddy's</div>
     <div class="number">3</div>
 
@@ -143,7 +167,7 @@ body {
         <div class="option">Carregar jogo</div>
         <div class="option" onclick="playJumpscare()">Jumpscare</div>
     </div>
-</div>
+            </div>
 
 <!-- NEWS -->
 <div id="news" class="screen">
@@ -157,11 +181,19 @@ body {
 
 <!-- OFFICE -->
 <div id="office" class="screen">
-    <img id="officeGif" src="https://64.media.tumblr.com/57c1b1a88b99aab505d73a10c781d3e1/tumblr_inline_p7i0wksKPG1rvg9kl_500.gif">
+
+    <div id="officeContainer">
+        <img id="officeGif" src="https://64.media.tumblr.com/57c1b1a88b99aab505d73a10c781d3e1/tumblr_inline_p7i0wksKPG1rvg9kl_500.gif">
+    </div>
 
     <div id="openCam" onclick="toggleCams()">CÂMERAS ▲</div>
+    <!-- RELÓGIO DA NOITE -->
+<div id="nightClock">12 AM</div>
 
-    <!-- CAMERAS -->
+<img id="endClockGif"
+     src="https://static.wikia.nocookie.net/freddy-fazbears-pizza/images/0/05/FNaF3Clock.gif"
+     style="display:none; position:absolute; inset:0; width:100%; height:100%; object-fit:contain; background:black; z-index:20;">
+
     <div id="cameraSystem">
         <img id="cameraView">
 
@@ -184,10 +216,10 @@ body {
 
 <script>
 const cams = [
- "https://static.wikia.nocookie.net/freddy-fazbears-pizza/images/e/eb/FNaF3_-_CAM_06.gif/revision/latest/smart/width/250/height/250?cb=20160411232014&path-prefix=es",
- "https://static.wikia.nocookie.net/freddy-fazbears-pizza/images/0/0f/FNaF3_-_CAM_05.gif/revision/latest?cb=20160411230102&path-prefix=es",
- "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuGe6rSsdSjm-4bPk_a9GQY88LRcXQkOJaDYET0I53mQ&s=10",
- "https://static.wikia.nocookie.net/freddy-fazbears-pizza/images/2/21/FNaF3_-_CAM_02.gif/revision/latest/smart/width/250/height/250?cb=20160411223616&path-prefix=es",
+ "https://i.gjcdn.net/public-data/fireside/posts/124/210/7751960/media/cam04-hkmywcwz.gif",
+ "https://i.gjcdn.net/public-data/fireside/posts/124/210/7751960/media/cam07-qs8knpss.gif",
+ "https://i.redd.it/pzpeoepjusk51.gif",
+ "https://i.redd.it/p1dxcnc31ja91.gif",
  "https://i.redd.it/e9sinchjusk51.gif"
 ];
 
@@ -241,6 +273,70 @@ function setCam(i){
   if(++n>5){clearInterval(g);cameraView.style.transform="";}
  },50);
 }
+
+/* ===== VIRAR SALA POR CLIQUE ===== */
+const officeContainer = document.getElementById("officeContainer");
+
+const officePos = {
+ esquerda: 0,
+ centro: -10,
+ direita: -20
+};
+
+officeContainer.addEventListener("click", (e)=>{
+ if(camOpen) return;
+
+ const r = officeContainer.getBoundingClientRect();
+ const x = e.clientX - r.left;
+
+ if(x < r.width*0.33){
+  officeGif.style.left = officePos.esquerda+"%";
+ }else if(x > r.width*0.66){
+  officeGif.style.left = officePos.direita+"%";
+ }else{
+  officeGif.style.left = officePos.centro+"%";
+ }
+});
+let hour = 12;
+let nightInterval;
+
+function startNightClock(){
+ hour = 12;
+ nightClock.innerText = "12 AM";
+
+ clearInterval(nightInterval);
+
+ nightInterval = setInterval(()=>{
+   if(hour === 12){
+     hour = 1;
+   }else{
+     hour++;
+   }
+
+   nightClock.innerText = hour + " AM";
+
+   if(hour === 6){
+     clearInterval(nightInterval);
+     endNight(); // GIF IMEDIATO
+   }
+ },30000); // 30 segundos
+}
+
+function endNight(){
+ document.getElementById("endClockGif").style.display = "block";
+
+ setTimeout(()=>{
+   document.getElementById("endClockGif").style.display = "none";
+   show("menu");
+ },7000); // duração do GIF
+}
+
+/* ATIVA O RELÓGIO QUANDO ENTRA NO OFFICE */
+const originalStartGame = startGame;
+startGame = function(){
+ originalStartGame();
+ setTimeout(startNightClock, 13000);
+};
 </script>
 
 </body>
